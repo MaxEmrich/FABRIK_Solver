@@ -1,9 +1,5 @@
 // FABRIK == Forwards and Backwards Reaching Inverse Kinematics:
 /*
-
-(Vector library may be needed. Need cross product, 
-dot product, vector subtraction and addition)
-
 - Get total length of all arm segments (constants)
 - Find the max length by adding up all lengths, find 
 where the arm could reach at its maximum
@@ -19,8 +15,6 @@ P2 at the start of the calculation, and P2 is the tail of the L1. P3 is the tail
 the vector L2, and P4 is the tail of L3. Assume also that the head of vector L1 is connected 
 to the tail of L2, and that the head of L2 is connected to the tail of L3. P5, then, 
 is where we want to place the end affector (the head of L3)
-- Process for FABRICK:
-  
 */
 
 #include <stdlib.h>
@@ -43,7 +37,6 @@ is where we want to place the end affector (the head of L3)
 // extern int errno; // extern allows us to share errno variables to other files
 // errno is set to 0 by default
 
-
 bool atGoal = false;
 struct R3Point* goalPoint;
 float goalDistance; // distance from the origin (0,0,0) to the point in space
@@ -55,38 +48,20 @@ struct Vector* vec1 = NULL;
 struct Vector* vec2 = NULL;
 struct Vector* endVec = NULL;
 
-// BASE servo determines orientation in 3d-space... adds z-dimension. 
-// BASE servo rotates around the y-axis
-// Servo servo_1;
-// Servo servo_2;
-// Servo servo_3;
-// Servo servo_4;
 
 struct Vector* backwards_vecs[NUM_SEGMENTS];
 struct Vector* forwards_vecs[NUM_SEGMENTS];
 
-// -----------------------------------------------------
-// -----------------------------------------------------
 
-  // asssume all positions and rotations start at (0,0,0)
-  // Define all 3d points by defining points RELATIVE to the (0,0,0) position of all points  
-  // Make all servos rotate to be straight up, and then reset the rotation to 0
+// MAIN LOOP ----------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 
-void setup() {  
+int main() {
+  // delay(100); 
 
-  // Serial.begin(BAUD_RATE);
-  // delay(200);
-
-  // servo_1.attach(3);
-  // servo_2.attach(4);
-  // servo_3.attach(5);
-  // servo_4.attach(6);
-
-  // -----------------------------------------------------
-  // -----------------------------------------------------
-
-  // this is a POINTER to an instance of the R3point structure  
-  goalPoint = new R3Point; // allocate memory for this pointer to a struct
+  // This is a POINTER to an instance of the R3point structure  
+  struct R3Point* goalPoint = new R3Point; // allocate memory for this pointer to a struct
 
   (*goalPoint).point_3d[0] = 3.0; // assign values to the point_3d array for our goal point (the point we want to reach)
   (*goalPoint).point_3d[1] = 3.0;
@@ -99,7 +74,7 @@ void setup() {
 
   struct R3Point* basePoint;
   basePoint = new R3Point;
-  
+
   (*basePoint).point_3d[0] = 0.0; // assign base point of the arm to be the origin, (0,0,0)
   (*basePoint).point_3d[1] = 0.0;
   (*basePoint).point_3d[2] = 0.0;
@@ -126,23 +101,6 @@ void setup() {
   forwards_vecs[1] = vec1;
   forwards_vecs[2] = vec2;
   forwards_vecs[3] = endVec;
-
-  // ----------------------------------------------
-  // ----------------------------------------------
-
-  // delay(500); // delay to make sure the serial monitor is open
-  // if (Serial) {
-  //   Serial.print("Serial.begin with ");  Serial.print(BAUD_RATE); Serial.println("baud rate...");
-  // }
-}
-
-// MAIN LOOP ----------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------
-
-void loop() {
-  // delay(100); 
-
 
   // test if end effector is at the goal point (or within a few milimeters of it)
   for (int i = 0; i < 3; i++) { 
