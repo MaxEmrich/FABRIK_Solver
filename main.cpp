@@ -26,6 +26,9 @@ is where we want to place the end affector (the head of L3)
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <cstdlib>
+#include <iostream>
+
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
@@ -54,10 +57,10 @@ struct Vector* endVec = NULL;
 
 // BASE servo determines orientation in 3d-space... adds z-dimension. 
 // BASE servo rotates around the y-axis
-Servo servo_1;
-Servo servo_2;
-Servo servo_3;
-Servo servo_4;
+// Servo servo_1;
+// Servo servo_2;
+// Servo servo_3;
+// Servo servo_4;
 
 struct Vector* backwards_vecs[NUM_SEGMENTS];
 struct Vector* forwards_vecs[NUM_SEGMENTS];
@@ -71,19 +74,19 @@ struct Vector* forwards_vecs[NUM_SEGMENTS];
 
 void setup() {  
 
-  Serial.begin(BAUD_RATE);
-  delay(200);
+  // Serial.begin(BAUD_RATE);
+  // delay(200);
 
-  servo_1.attach(3);
-  servo_2.attach(4);
-  servo_3.attach(5);
-  servo_4.attach(6);
+  // servo_1.attach(3);
+  // servo_2.attach(4);
+  // servo_3.attach(5);
+  // servo_4.attach(6);
 
   // -----------------------------------------------------
   // -----------------------------------------------------
 
   // this is a POINTER to an instance of the R3point structure  
-  goalPoint = malloc(sizeof(struct R3Point)); // allocate memory for this pointer to a struct
+  goalPoint = new R3Point; // allocate memory for this pointer to a struct
 
   (*goalPoint).point_3d[0] = 3.0; // assign values to the point_3d array for our goal point (the point we want to reach)
   (*goalPoint).point_3d[1] = 3.0;
@@ -95,7 +98,7 @@ void setup() {
   goalDistance = sqrt((x*x)+(y*y)+(z*z));
 
   struct R3Point* basePoint;
-  basePoint = malloc(sizeof(struct R3Point));
+  basePoint = new R3Point;
   
   (*basePoint).point_3d[0] = 0.0; // assign base point of the arm to be the origin, (0,0,0)
   (*basePoint).point_3d[1] = 0.0;
@@ -127,10 +130,10 @@ void setup() {
   // ----------------------------------------------
   // ----------------------------------------------
 
-  delay(500); // delay to make sure the serial monitor is open
-  if (Serial) {
-    Serial.print("Serial.begin with ");  Serial.print(BAUD_RATE); Serial.println("baud rate...");
-  }
+  // delay(500); // delay to make sure the serial monitor is open
+  // if (Serial) {
+  //   Serial.print("Serial.begin with ");  Serial.print(BAUD_RATE); Serial.println("baud rate...");
+  // }
 }
 
 // MAIN LOOP ----------------------------------------------------------------------------------
@@ -138,26 +141,23 @@ void setup() {
 // --------------------------------------------------------------------------------------------
 
 void loop() {
-  delay(100); 
+  // delay(100); 
 
-<<<<<<< HEAD
+
   // test if end effector is at the goal point (or within a few milimeters of it)
   for (int i = 0; i < 3; i++) { 
     if ((goalPoint->point_3d[i] - 1.0) < (endVec->vectorComponents[i]) < (goalPoint->point_3d[i] + 1.0)) { // check if the end effector in a very close RANGE of the goal point 
       continue;
     } else {
-      isAtGoal = false;
+      atGoal = false;
       break;
     }
-    isAtGoal = true;
+    atGoal = true;
   }
-  if (isAtGoal) {
-    delay(300);
-    Serial.println("REACHED GOAL POINT!");
-    delay(300);
+  if (atGoal) {
+    std::cout << "Goal reached!" << std::endl;
     exit(0);
   } 
-=======
   isWithinRange();  
   isAtGoal();
 
@@ -170,20 +170,7 @@ void loop() {
   updateVector(forwards_vecs[1], baseVec->headPoint, backwards_vecs[1]->tailPoint, VEC1_LENGTH);
   updateVector(forwards_vecs[2], forwards_vecs[1]->headPoint, backwards_vecs[1]->headPoint, VEC2_LENGTH);
   updateVector(forwards_vecs[3], forwards_vecs[2]->headPoint, goalPoint, END_EFFECTOR_LENGTH);
->>>>>>> b7429019ac3c7ba3db7929cd65110be5b40c951d
 
-
-<<<<<<< HEAD
-  // FORWARDS-Reaching Step
-  // -----------------------------
-  // We are now reversing the direction, so the head and tails of the vectors are reversed
-  // 1. Make VEC_1'' (VEC_1 prime prime). Head: VEC_1' head (found in the backwards_vecs). Tail: Start point, AKA (0,0,0) 
-  forwards_vecs[0] = newVec_FromPoints(basePoint, backwards_vecs[])
-  
-=======
-
->>>>>>> b7429019ac3c7ba3db7929cd65110be5b40c951d
-  delay(100);
 }
 
 // --------------------------------------------------------------------------------------------
@@ -195,7 +182,7 @@ void loop() {
 // --------------------------------------------------------------------------------------------
 
 struct Vector* newVec_FromPoints(struct R3Point* p1, struct R3Point* p2) {  // make a new vector given two points in 3-space -- p1 is the tail, p2 is the head 
-  struct Vector* newVector = malloc(sizeof(struct Vector));
+  struct Vector* newVector = new Vector;
 
   // to make component vector, we use p2 - p1 = new vector
 
@@ -220,7 +207,7 @@ struct Vector* newVec_FromPoints(struct R3Point* p1, struct R3Point* p2) {  // m
 }
 
 struct Vector* newVec_Comps(float x, float y, float z) {    // make a new vector with COMPONENTS x, y, and z 
-  struct Vector* newVector = malloc(sizeof(struct Vector));
+  struct Vector* newVector = new Vector;
   (*newVector).vectorComponents[0] = x;
   (*newVector).vectorComponents[1] = y;
   (*newVector).vectorComponents[2] = z;
@@ -274,7 +261,7 @@ float getMag(struct Vector* vector) { // returns the magnitude of the passed in 
 }
 
 struct Vector* makeUnitVec(struct Vector* vector) {
-  struct Vector* unitVector = malloc(sizeof(struct Vector)); 
+  struct Vector* unitVector = new Vector; 
   float vectorMag = getMag(vector);
 
   for (int i = 0; i < 3; i++) {
@@ -285,7 +272,7 @@ struct Vector* makeUnitVec(struct Vector* vector) {
   float finalMag = getMag(vector);
   assert(finalMag == 1.0); // state that we assume the magnitude to be 1.0, if this changes, then there has been a logical error
   if (1.0 < finalMag || 1.0 > finalMag) {
-    Serial.println("Error calculating magnitude...");
+    std::cout << "Error calculating magnitude..." << std::endl;
     exit(-1);
   }
    
@@ -310,24 +297,24 @@ float getAngle(struct Vector* vector); // define later with magnitude of vector.
 // --------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------
 
-int rotate_servo(float num_degrees, Servo servo, float min_degrees = 0.0, float max_degrees = 180.0) {
-  float current_angle = servo.read();
-  float desired_rotation = constrain(num_degrees, min_degrees, max_degrees); // default of min and max are the full rotation constraints of the servo, 0 to 180 degrees 
-  float num_degrees_to_rotate = desired_rotation - current_angle; // how many degrees we are rotating from current angle
+// int rotate_servo(float num_degrees, Servo servo, float min_degrees = 0.0, float max_degrees = 180.0) {
+//   float current_angle = servo.read();
+//   float desired_rotation = constrain(num_degrees, min_degrees, max_degrees); // default of min and max are the full rotation constraints of the servo, 0 to 180 degrees 
+//   float num_degrees_to_rotate = desired_rotation - current_angle; // how many degrees we are rotating from current angle
 
-  if (num_degrees_to_rotate > 0.0) { // if num_degrees_to_rotate is positive, we rotate in a positive direction
-      for (int i = current_angle; i < num_degrees_to_rotate; i++) { // for smooth rotation
-      servo.write(i);
-      delay(10); // smoothing rotation
-    }
-  } else if (num_degrees_to_rotate < 0.0) { // if num_degrees_to_rotate is negative, we rotate in a negative direction
-      for (int i = current_angle; i > num_degrees_to_rotate; i--) {
-      servo.write(i);
-      delay(10);
-    }
-  }
-  return 0;
-}
+//   if (num_degrees_to_rotate > 0.0) { // if num_degrees_to_rotate is positive, we rotate in a positive direction
+//       for (int i = current_angle; i < num_degrees_to_rotate; i++) { // for smooth rotation
+//       servo.write(i);
+//       delay(10); // smoothing rotation
+//     }
+//   } else if (num_degrees_to_rotate < 0.0) { // if num_degrees_to_rotate is negative, we rotate in a negative direction
+//       for (int i = current_angle; i > num_degrees_to_rotate; i--) {
+//       servo.write(i);
+//       delay(10);
+//     }
+//   }
+//   return 0;
+// }
 
 // --------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------
@@ -343,8 +330,7 @@ void printVectorComps(struct Vector* vector) {
   char buff[64];
   for (int i = 0; i < 3; i++) { // i < 3 for x,y,z dimensions
     sprintf(buff, "The %c component for the head of this vector is:", xyz[i]);
-    Serial.println(buff);
-    // Serial.println(vector->headPoint[i]);
+    std::cout << buff << std::endl;
   } 
 }
 
@@ -354,10 +340,10 @@ void isWithinRange() {
     sum_of_mags = sum_of_mags + forwards_vecs[i]->magnitude;
   }
   if (goalDistance > sum_of_mags) {
-    Serial.println("The goal point is OUT OF RANGE of the arm!");
+    std::cout << "The goal point is OUT OF RANGE of the arm!" << std::endl;
     exit(-1);
   } else {
-    Serial.println("The goal point seems to be in range...");
+    std::cout << "The goal point seems to be in range..." << std::endl;
   }
 }
 
@@ -374,9 +360,7 @@ void isAtGoal() {
     atGoal = true;
   }
   if (atGoal) {
-    delay(300);
-    Serial.println("REACHED GOAL POINT!");
-    delay(300);
+    std::cout << "REACHED GOAL POINT!" << std::endl;
   }
 }
 
