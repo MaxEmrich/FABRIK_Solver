@@ -35,6 +35,6 @@ float getXComp(float mag, float angle); // Get the y component of the vector (in
 
 float getAngle(struct Vector* vector); // Define later with magnitude of vector...
 
-// int rotate_servo(float num_degrees, Servo servo, float min_degrees = 0.0, float max_degrees = 180.0); // Rotates a servo smoothly, optional params for max and min degrees
+int rotate_servo(float num_degrees, Servo servo, float min_degrees = 0.0, float max_degrees = 180.0); // Rotates a servo smoothly, optional params for max and min degrees
 
 #endif // FUNCS
