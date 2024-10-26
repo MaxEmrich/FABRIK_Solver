@@ -1,5 +1,5 @@
-#ifndef DEFS
-#define DEFS
+#ifndef DEFS_HPP
+#define DEFS_HPP
 
 // Strcture, enum, and constant definitions 
 

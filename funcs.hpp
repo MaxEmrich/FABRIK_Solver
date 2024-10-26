@@ -1,7 +1,7 @@
-#ifndef FUNCS
-#define FUNCS
+#ifndef FUNCS_HPP
+#define FUNCS_HPP
 
-#include "defs.h"
+#include "defs.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -13,9 +13,13 @@
 
 // Function declarations
 
-void isWithinRange(); // Tests if the robotic arm is long enough to reach to the given goal point in space 
+// --------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 
-void isAtGoal(); // Tests if end-effector is at--or within a specified range of--the goal point 
+
+void isWithinRange(Vector* forwards_vecs[], int goalDistance); // Tests if the robotic arm is long enough to reach to the given goal point in space 
+
+void isAtGoal(R3Point* goalPoint, Vector* endVec); // Tests if end-effector is at--or within a specified range of--the goal point 
 
 void updateVector(struct Vector* dest, struct R3Point* from, struct R3Point* to, float length); // IMPORTANT: Updates the given destination vector given correct "to" and "from" vectors  
 
