@@ -6,18 +6,15 @@
 #define NUM_SEGMENTS 4
 
 /*
-
  The arm/vector lengths are in milimeters, 
  arm lengths are measured from servo rotational axis 
  to the next servo's rotational axis 
-
 */
 
-#define BASE_VEC_LENGTH 5.0
-#define VEC1_LENGTH 60.5 
-#define VEC2_LENGTH 76.1 
-#define END_EFFECTOR_LENGTH 5.0 
-
+const float BASE_VEC_LENGTH = 5.0;
+const float VEC1_LENGTH = 60.5; 
+const float VEC2_LENGTH = 76.1; 
+const float END_EFFECTOR_LENGTH = 5.0;
 
 struct R3Point {
   float point_3d[3];

@@ -19,7 +19,7 @@
 
 void isWithinRange(Vector* forwards_vecs[], int goalDistance); // Tests if the robotic arm is long enough to reach to the given goal point in space 
 
-void isAtGoal(R3Point* goalPoint, Vector* endVec); // Tests if end-effector is at--or within a specified range of--the goal point 
+bool isAtGoal(R3Point* goalPoint, Vector* endVec);  // Tests if end-effector is at--or within a specified range of--the goal point 
 
 void updateVector(struct Vector* dest, struct R3Point* from, struct R3Point* to, float length); // IMPORTANT: Updates the given destination vector given correct "to" and "from" vectors  
 
