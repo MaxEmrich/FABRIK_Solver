@@ -67,7 +67,7 @@ int main() {
     backwards_vecs[i] = new Vector;  // Allocate memory
   }
 
-  int loop_number = 1;
+  int loop_number = 1 ;
   std::cout << "Enter do-while loop" << std::endl;
   do {
       std::cout << std::endl;
