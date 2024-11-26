@@ -43,11 +43,7 @@ int main() {
   forwards_vecs[2] = vec_2;
   forwards_vecs[3] = end_vec;
 
-  for (int i = 0; i < NUM_SEGMENTS; i++) {
-    backwards_vecs[i] = new vector_3d;  // Allocate memory
-  }
-
-  int loop_number = 1 ;
+  int loop_number = 1;
   std::cout << "Enter do-while loop" << std::endl;
   do {
       std::cout << std::endl;
