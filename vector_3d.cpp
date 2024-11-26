@@ -3,21 +3,48 @@
 #include "point_3d.hpp"
 #include "vector_3d.hpp"
 
+vector_3d::vector_3d(float x, float y, float z, std::string name) 
+    : x(x), y(y), z(z), name(name), head(0.0f, 0.0f, 0.0f), tail(0.0f, 0.0f, 0.0f) {
+    mag = get_mag();
+}
 
-vector_3d::vector_3d(float x, float y, float z) :
-        x(x), y(y), z(z) {
-    float mag = get_magnitude();
-    std::cout << "New Vector Initialized" << std::endl;
+std::string vector_3d::get_name() {
+    return this->name;
+}
+
+void vector_3d::normalize() {
+    // Unit vector formula is original vector/magnitude of original vector
+    mag = get_mag();  // Update magnitude
+    if (mag == 0.0f) {
+        std::cout << "Could not normalize vector: " << name << std::endl;
+        std::cerr << "Error: Cannot normalize a zero vector." << std::endl;
+        exit(-1);
+    }
+
+    x /= mag;
+    y /= mag;
+    z /= mag;
+
+    // Error checking
+    float final_mag = get_mag();
+    std::cout << "Final magnitude: " << final_mag << std::endl;
+    if (fabs(final_mag - 1.0) > 1e-6) {  // Use a tolerance for floating-point comparison
+        std::cerr << "Error calculating magnitude." << std::endl;
+        exit(-1);
+    }
 }
 
 
-// void vector_3d::set_head(point_3d p) {
-//     this->head = p;
-// }
+void vector_3d::update_vec(point_3d from, point_3d to, float length) {
+    std::cout << "Updating vector: " << this->name << std::endl;
+    std::cout << "From point: " << from.x << ", " << from.y << ", " << from.z << std::endl;
+    std::cout << "To point: " << to.x << ", " << to.y << ", " << to.z << std::endl;
+    this->set_new_comps(to - from); // Set all the comps to this new "head" point
+    this->normalize();
+    this->scale(length);
+    std::cout << "Resulting components: x = " << this->x << ", y = " << this->y << ", z = " << this->z << std::endl;
+}
 
-// void vector_3d::set_tail(point_3d p) {
-//     this->tail = p;
-// }
 
 vector_3d vector_3d::vec_from_points(point_3d p1, point_3d p2) {  
     // Make a new vector given two points in 3-space -- p1 is the tail, p2 is the head 
@@ -26,6 +53,34 @@ vector_3d vector_3d::vec_from_points(point_3d p1, point_3d p2) {
     point_3d new_head = p2 - p1; 
     vec.set_new_comps(new_head);
     return vec;
+}
+
+point_3d vector_3d::get_head() const {
+    return this->head;
+}
+
+point_3d vector_3d::get_tail() const {
+    return this->tail;
+}
+
+void vector_3d::set_head(point_3d p) {
+    this->head = p;
+}
+
+void vector_3d::set_tail(point_3d p) {
+    this->tail = p;
+}
+
+float vector_3d::get_x() const {
+    return this->x;
+}
+
+float vector_3d::get_y() const {
+    return this->y;
+}
+
+float vector_3d::get_z() const {
+    return this->y;
 }
 
 void vector_3d::set_x(float new_x) {
@@ -39,6 +94,13 @@ void vector_3d::set_y(float new_y) {
 void vector_3d::set_z(float new_z) {
     this->z = new_z;
 }
+
+void vector_3d::scale(float scale_val) {
+    x = x * (scale_val); 
+    y = y * (scale_val);
+    z = z * (scale_val);
+}
+
 
 // Can set a vector's components with x, y, z
 void vector_3d::set_new_comps(float new_x, float new_y, float new_z) {
@@ -54,10 +116,9 @@ void vector_3d::set_new_comps(point_3d p) {
     z = p.z;
 }
 
-float vector_3d::get_magnitude() const {
+float vector_3d::get_mag() const {
   float sum = (x*x) + (y*y) + (z*z);
   float mag = sqrt(sum);
-  std::cout << "The magnitude is: " << mag << std::endl;
   return mag;
 }
 
