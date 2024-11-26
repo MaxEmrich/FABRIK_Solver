@@ -74,17 +74,6 @@ void scaleVec(Vector* vector, float scale_val) {
   (*vector).vectorComponents[0] = ((*vector).vectorComponents[0]) * (scale_val); // scale components by scale value
   (*vector).vectorComponents[1] = ((*vector).vectorComponents[1]) * (scale_val);
   (*vector).vectorComponents[2] = ((*vector).vectorComponents[2]) * (scale_val);
-
-}
-
-float getMag(Vector* vector) { // returns the magnitude of the passed in vector
-  float x_val = (*vector).vectorComponents[0];
-  float y_val = (*vector).vectorComponents[1];
-  float z_val = (*vector).vectorComponents[2];
-  float sumComponents = (x_val*x_val) + (y_val*y_val) + (z_val*z_val);
-  float mag = sqrt(sumComponents);
-  std::cout << "The magnitude is: " << mag << std::endl;
-  return mag;
 }
 
 Vector* makeUnitVec(Vector* vector) {
@@ -105,13 +94,6 @@ Vector* makeUnitVec(Vector* vector) {
     return unitVector;
 }  
 
-float getYComp(float mag, float angle) { // get the y component of the vector (in an xy plane)
-  return mag * sin(angle * (M_PI/180.0)); // sin and cos only accepts radians, so we need to convert the angle to degrees 
-}
-
-float getXComp(float mag, float angle) { // get the y component of the vector (in an xy plane)
-  return mag * cos(angle * (M_PI/180.0));
-}
 
 // float getAngle(Vector* vector); // define later with magnitude of vector...
 
@@ -150,16 +132,6 @@ int rotate_servo(float num_degrees, Servo servo, float min_degrees = 0.0, float 
 // OTHER OPERATIONS ---------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------
-
-void printVectorComps(Vector* vector) {
-  char xyz[3] = {'x', 'y', 'z'};
-  char buff[64];
-  for (int i = 0; i < 3; i++) { // i < 3 for x,y,z dimensions
-    sprintf(buff, "The %c component for the head of this vector is:", xyz[i]);
-    std::cout << buff << std::endl;
-    // std::cout(vector->headPoint[i]);
-  } 
-}
 
 void isWithinRange(Vector* forwards_vecs[], int goalDistance) {
   float sum_of_mags = 0.0;
