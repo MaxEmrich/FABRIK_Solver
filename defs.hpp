@@ -11,10 +11,10 @@
 
 #define NUM_SEGMENTS 4
 
-const float BASE_VEC_LENGTH = 5.0;
-const float VEC_1_LENGTH = 60.5; 
-const float VEC_2_LENGTH = 76.1; 
-const float END_EFFECTOR_LENGTH = 5.0;
+const float BASE_VEC_LENGTH = 10.0;
+const float VEC_1_LENGTH = 20.5; 
+const float VEC_2_LENGTH = 15.1; 
+const float END_EFFECTOR_LENGTH = 10.0;
 
 const int NUM_JOINTS = 4;
 

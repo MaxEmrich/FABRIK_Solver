@@ -4,7 +4,7 @@
 #include "vector_3d.hpp"
 
 vector_3d::vector_3d(float x, float y, float z, std::string name) 
-    : x(x), y(y), z(z), name(name), head(0.0f, 0.0f, 0.0f), tail(0.0f, 0.0f, 0.0f) {
+    : x(x), y(y), z(z), name(name), head(x, y, z), tail(0.0f, 0.0f, 0.0f) {
     mag = get_mag();
 }
 
@@ -21,17 +21,17 @@ void vector_3d::normalize() {
         exit(-1);
     }
 
-    x /= mag;
-    y /= mag;
-    z /= mag;
+    x = x / mag;
+    y = y / mag;
+    z = z / mag;
 
     // Error checking
     float final_mag = get_mag();
-    std::cout << "Final magnitude: " << final_mag << std::endl;
     if (fabs(final_mag - 1.0) > 1e-6) {  // Use a tolerance for floating-point comparison
         std::cerr << "Error calculating magnitude." << std::endl;
         exit(-1);
     }
+    mag = final_mag;
 }
 
 
@@ -39,10 +39,13 @@ void vector_3d::update_vec(point_3d from, point_3d to, float length) {
     std::cout << "Updating vector: " << this->name << std::endl;
     std::cout << "From point: " << from.x << ", " << from.y << ", " << from.z << std::endl;
     std::cout << "To point: " << to.x << ", " << to.y << ", " << to.z << std::endl;
+    mag = get_mag();
     this->set_new_comps(to - from); // Set all the comps to this new "head" point
     this->normalize();
     this->scale(length);
-    std::cout << "Resulting components: x = " << this->x << ", y = " << this->y << ", z = " << this->z << std::endl;
+    point_3d new_head(x, y, z);
+    this->set_head(new_head);
+    std::cout << "Resulting components: x = " << this->x << ", y = " << this->y << ", z = " << this->z << std::endl << std::endl;
 }
 
 
@@ -80,7 +83,7 @@ float vector_3d::get_y() const {
 }
 
 float vector_3d::get_z() const {
-    return this->y;
+    return this->z;
 }
 
 void vector_3d::set_x(float new_x) {
@@ -111,9 +114,9 @@ void vector_3d::set_new_comps(float new_x, float new_y, float new_z) {
 
 // Can also set a vector's components with a point_3d 
 void vector_3d::set_new_comps(point_3d p) {
-    x = p.x;
-    y = p.y;
-    z = p.z;
+    this->x = p.x;
+    this->y = p.y;
+    this->z = p.z;
 }
 
 float vector_3d::get_mag() const {
@@ -131,6 +134,7 @@ float vector_3d::get_x_comp(float angle) { // Get the y component of the vector 
 }
 
 void vector_3d::print_components() const {
+    std::cout << name << std::endl;
     std::cout << "X component: " << x << std::endl;
     std::cout << "Y component: " << y << std::endl;
     std::cout << "Z component: " << z << std::endl;
